@@ -8,52 +8,53 @@ public class CPTHadriel{
 		int intDeck[][];
 		int intPlayer[][];
 		int intDealer[][];
-		int intValue;
-		int intSuite;
-		int intCount;
 		String strName;
 		int intMoney = 1000;
 		int intBet;
-		int intRand = (int)(Math.random() * 100 + 1);
+		int intCount;
 		
 		// Array for deck
 		intDeck = new int[52][3];
 		
 		// Assigning Values
-		for(intCount = 0; intCount <= 52; intCount++){
-			for(intValue = 0; intValue <= 13; intValue++){
-				intDeck[intCount][0] = intValue; 
+		for(intCount = 0; intCount < 52; intCount++){
+			intDeck[intCount][0] = (intCount % 13) + 1;
+			if(intDeck[intCount][0] > 10){
+				intDeck[intCount][0] = 10;
 			}
-		}
-		for(intCount = 0; intCount <= 52; intCount++){
-			for(intSuite = 0; intSuite <= 4; intSuite++){
-				intDeck[intCount][1] = intSuite;
-			}
-		}
-		for(intCount = 0; intCount <= 52; intCount++){
-			intDeck[intCount][2] = intRand;
+			intDeck[intCount][1] = (intCount / 13) + 1;
+			intDeck[intCount][2] = (int)(Math.random() * 100 + 1);
 		}
 		
-		// Sort
-		for (intRand = 0; intRand < 3 - 1; intRand++) {
-			for (intValue = 0; intValue < 3 - 1 - intRand; intValue++) {
-				// Compare the prices (removing the "$" sign)
-				if(intDeck[intRand][2] > intDeck[intRand + 1][2]){
-					// Take Left Item
-					intValue = intDeck[intValue][0];
-					intRand = intDeck[intValue][2];
-					// Right Item Moves To The Left
-					intDeck[intValue][0] = intDeck[intValue + 1][0];
-					intDeck[intValue][2] = intDeck[intValue + 1][2];
-					// Put Temporary Value On The Right
-					intDeck[intValue + 1][0] = intValue;						
-					intDeck[intValue + 1][2] = intRand;
+		// Create the variables for the sorting
+		int intTempVal;
+		int intTempSuite;
+		int intTempRand;
+		int intRow;
+		int intRow2;
+		
+		// Loop every single card so it uses bubble sorting and sorts the random numbers from lowest to highest
+		for(intRow2 = 0; intRow2 < 52 - 1; intRow2++){
+			for(intRow = 0; intRow < 52 - 1- intRow2; intRow++){
+				if(intDeck[intRow][2] > intDeck[intRow + 1][2]){
+					// Take the left item
+					intTempVal = intDeck[intRow][0];
+					intTempSuite = intDeck[intRow][1];
+					intTempRand = intDeck[intRow][2];
+					// Right item moves to the left
+					intDeck[intRow][0] = intDeck[intRow+1][0];
+					intDeck[intRow][1] = intDeck[intRow+1][1];
+					intDeck[intRow][2] = intDeck[intRow+1][2];
+					// Put temporary value on the right
+					intDeck[intRow+1][0] = intTempVal;
+					intDeck[intRow+1][1] = intTempSuite;
+					intDeck[intRow+1][2] = intTempRand;
 				}
-				con.println(intValue);
-				con.println(intRand);
-				con.sleep(1000);
 			}
 		}
+		
+
+		
 		
 		
 		// Input
