@@ -55,8 +55,21 @@ public class hadrieltoolsCPT {
     }
     
     public static void dealCard(int[][] intDeck, int[][] intHand, int intCardCount){
-		intHand[intCardCount][0] = intDeck[intCardCount][0];
-		intHand[intCardCount][1] = intDeck[intCardCount][1];
+		// Randomly pick a card from the deck
+		int intCardIndex = (int)(Math.random() * 52);
+		
+		// Make sure the card has not been dealt by checking if it's random number is not zero
+		while(intDeck[intCardIndex][2] == 0){
+			intCardIndex = (int)(Math.random() * 52);
+		}
+		
+		// Add card to player or dealer's hand
+		intHand[intCardCount][0] = intDeck[intCardIndex][0];
+		intHand[intCardCount][1] = intDeck[intCardIndex][1];
+		
+		// Mark the card as dealt by setting it to zero
+		intDeck[intCardIndex][2] = 0; 
+		
 	}
     
     public static void printHand(Console con, int[][] intHand, int intCardCount){
@@ -64,6 +77,27 @@ public class hadrieltoolsCPT {
 			con.println("Card "+(intCount + 1) + ": Value = " + intHand[intCount][0] + ", Suit = " + intHand[intCount][1]);
 		}
 	}
+	
+	public static int handValue(int[][] intHand, int intCardCount){
+		int intTotal = 0;
+		int intAces = 0;
+		
+		for(int intCount = 0; intCount < intCardCount; intCount++){
+			int intCardValue = intHand[intCount][0];
+			if(intCardValue == 1){
+				intAces = intAces + 1;
+				intTotal += 11;
+			}else{
+				intTotal += intCardValue;
+			}
+		}
+		while(intTotal > 21 && intAces > 0){
+			intTotal -= 10;
+			intAces = intAces - 1;
+		}
+	return intTotal;
+	}
+	
     
     
     
