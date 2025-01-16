@@ -21,9 +21,12 @@ public class CPTHadriel{
 		int intPlayerCardCount = 0;
 		int intDealerCardCount = 0;
 		String strOption = "";
-		String strLine1 = "(p)lay";
+		String strLine1 = "Enter P to play";
 		String strLine2 = "(v)iew high scores";
 		String strLine3 = "(q)uit";
+		char chrChoice;
+		int intPlayerValue = 0;
+		int intDealerValue = 0;
 		
 		// Array for deck
 		intDeck = new int[52][3];
@@ -32,9 +35,11 @@ public class CPTHadriel{
 		con.drawString(strLine1, 450, 360);
 		con.drawString(strLine2, 450, 380);
 		con.drawString(strLine3, 450, 400);
+		chrChoice = con.readChar();
 		
 		// Input
-		if(con.getChar == "p"){
+		if((chrChoice == 'p')){
+			con.clear();
 			con.print("Enter your username: ");
 			strName = con.readLine();
 			// Special username
@@ -58,8 +63,6 @@ public class CPTHadriel{
 				intMoney = intMoney - intBet;
 				System.out.println("User's money: "+intMoney);
 				con.clear();
-				
-				
 				
 				// Shuffle deck
 				if(intBet > 0){
@@ -86,58 +89,68 @@ public class CPTHadriel{
 					}else if(hadrieltoolsCPT.handValue(intDealer, intDealerCardCount) == 21){
 						con.println("Dealer has Blackjack! Player loses!");
 						con.println("Your money: "+intMoney);
-					}
-					
-					// Ask user hit or stand
-					con.println("");
-					con.println("Hit or Stand: ");
-					strOption = con.readLine();
-					con.clear();
-					
-					// Check if user hits or stands
-					while(strOption.equalsIgnoreCase("hit")){
-						hadrieltoolsCPT.dealCard(intDeck, intPlayer, intPlayerCardCount++);
-						con.println("Player's new card: ");
-						hadrieltoolsCPT.printHand(con, intPlayer, intPlayerCardCount);
-						if(hadrieltoolsCPT.handValue(intPlayer, intPlayerCardCount) > 21){
-							con.println("Player busts! You lose!");
-							con.println("Your money: "+intMoney);
-							break;
-						}
-						con.println("");
-						con.println("Hit or stand: ");
+					}else if(intPlayerValue == 9 || intPlayerValue == 10 || intPlayerValue == 11){
+						con.println("Would you like to double down? (y/n): ");
 						strOption = con.readLine();
-						con.clear();
-					}
-						
-					if(strOption.equalsIgnoreCase("stand")){
-						while(hadrieltoolsCPT.handValue(intDealer, intDealerCardCount) < 17){
-							hadrieltoolsCPT.dealCard(intDeck, intDealer, intDealerCardCount++);
+						if(strOption.equalsIgnoreCase("y")){
+							intBet = intBet * 2;
+							hadrieltoolsCPT.dealCard(intDeck, intPlayer, intPlayerCardCount++);
+							hadrieltoolsCPT.printHand(con, intPlayer, intPlayerCardCount);
 						}
-						con.println("Dealer's hand: ");
-						hadrieltoolsCPT.printHand(con, intDealer, intDealerCardCount);
-						if(hadrieltoolsCPT.handValue(intDealer, intDealerCardCount) > 21){
-							con.println("Dealer busts! Player wins!");
-							intMoney += intBet * 2;
-							con.println("Your money: "+intMoney);
-						}else{
-							int intPlayerValue = hadrieltoolsCPT.handValue(intPlayer, intPlayerCardCount);
-							int intDealerValue = hadrieltoolsCPT.handValue(intDealer, intDealerCardCount);
-							if(intPlayerValue > intDealerValue){
-								con.println("Player wins!");
-								intMoney += intBet * 2;
-								con.println("Your money: "+intMoney);
-							}else if(intPlayerValue < intDealerValue){
-								con.println("Dealer wins! Player loses!");
-								con.println("Your money: "+intMoney);
-							}else{
-								con.println("Its a tie!");
-								intMoney += intBet;
-								con.println("Your money: "+intMoney);
+					}else{
+					
+								// Ask user hit or stand
+								con.println("");
+								con.println("Hit or Stand: ");
+								strOption = con.readLine();
+								con.clear();
+								
+								// If user hits
+								while(strOption.equalsIgnoreCase("hit")){
+									hadrieltoolsCPT.dealCard(intDeck, intPlayer, intPlayerCardCount++);
+									con.println("Player's new card: ");
+									hadrieltoolsCPT.printHand(con, intPlayer, intPlayerCardCount);
+									if(hadrieltoolsCPT.handValue(intPlayer, intPlayerCardCount) > 21){
+										con.println("Player busts! You lose!");
+										con.println("Your money: "+intMoney);
+										break;
+									}
+									con.println("");
+									con.println("Hit or stand: ");
+									strOption = con.readLine();
+									con.clear();
+								}
+									
+								// If user stands
+								if(strOption.equalsIgnoreCase("stand")){
+									while(hadrieltoolsCPT.handValue(intDealer, intDealerCardCount) < 17){
+										hadrieltoolsCPT.dealCard(intDeck, intDealer, intDealerCardCount++);
+									}
+									con.println("Dealer's hand: ");
+									hadrieltoolsCPT.printHand(con, intDealer, intDealerCardCount);
+									if(hadrieltoolsCPT.handValue(intDealer, intDealerCardCount) > 21){
+										con.println("Dealer busts! Player wins!");
+										intMoney += intBet * 2;
+										con.println("Your money: "+intMoney);
+									}else{
+										intPlayerValue = hadrieltoolsCPT.handValue(intPlayer, intPlayerCardCount);
+										intDealerValue = hadrieltoolsCPT.handValue(intDealer, intDealerCardCount);
+										if(intPlayerValue > intDealerValue){
+											con.println("Player wins!");
+											intMoney += intBet * 2;
+											con.println("Your money: "+intMoney);
+										}else if(intPlayerValue < intDealerValue){
+											con.println("Dealer wins! Player loses!");
+											con.println("Your money: "+intMoney);
+										}else{
+											con.println("Its a tie!");
+											intMoney += intBet;
+											con.println("Your money: "+intMoney);
+										}
+									}
+								}
 							}
 						}
-					}
-				}
 				
 				// Asks if player wants to play again
 				if(intMoney > 0){
