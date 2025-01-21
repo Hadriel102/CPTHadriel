@@ -67,10 +67,8 @@ public class CPTHadriel {
 						// Enter bet with error handling
 						boolean blnValidBet = false;
 						while(!blnValidBet){
-							con.print("Enter bet amount: ");
-							intBet = con.readInt();
-							
-							
+							con.print("Enter bet amount (no $ dollars sign): ");
+							intBet = con.readInt();							
 							if(intBet > 0 && intBet <= intMoney){
 								blnValidBet = true;
 							}else{
