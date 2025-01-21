@@ -1,9 +1,9 @@
-	import arc.*;
-	import java.awt.*;
-	import java.awt.image.*;
+import arc.*;
+import java.awt.*;
+import java.awt.image.*;
 
-	public class CPTHadriel {
-		public static void main(String[] args) {
+public class CPTHadriel {
+	public static void main(String[] args) {
 			// Create console window
 			Console con = new Console("Blackjack", 1280, 720);
 			BufferedImage imgBlackJack = con.loadImage("Blackjack4.jpg");
@@ -69,6 +69,8 @@
 						while(!blnValidBet){
 							con.print("Enter bet amount: ");
 							intBet = con.readInt();
+							
+							
 							if(intBet > 0 && intBet <= intMoney){
 								blnValidBet = true;
 							}else{

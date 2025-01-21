@@ -189,7 +189,7 @@ public class hadrieltoolsCPT {
 	public static boolean checkFiveCardWin(Console con, int[][] intPlayer, int intPlayerCardCount, int intPlayerValue, int[][] intDealer, int intDealerCardCount, int intDealerValue, int intBet, int intMoney){
 		if(intPlayerCardCount == 5 && intPlayerValue <= 21){
 			con.println("Player wins with 5 cards without busting!");
-			intMoney += intBet * 2;
+			intMoney += intBet * 3;
 			con.println("Your money: "+intMoney);
 			return true;
 		}else if(intDealerCardCount == 5 && intDealerValue <= 21){
