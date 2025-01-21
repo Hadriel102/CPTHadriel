@@ -41,6 +41,12 @@ public class CPTHadriel {
 
 				// Input
 				if ((chrChoice == 'p')) {
+					// Reset card counts and game status
+					intPlayerCardCount = 0;
+					intDealerCardCount = 0;
+					intMoney = 1000;
+					blnGameWon = false;
+					hadrieltoolsCPT.shuffleDeck();
 					con.clear();
 					con.print("Enter your username: ");
 					strName = con.readLine();
@@ -58,11 +64,7 @@ public class CPTHadriel {
 						intPlayer = new int[5][2];
 						intDealer = new int[5][2];
 						
-						// Reset card counts and game status
-						intPlayerCardCount = 0;
-						intDealerCardCount = 0;
-						blnGameWon = false;
-						hadrieltoolsCPT.shuffleDeck();
+						
 
 						// Enter bet with error handling
 						boolean blnValidBet = false;
@@ -73,6 +75,7 @@ public class CPTHadriel {
 								blnValidBet = true;
 							}else{
 								con.println("Invalid bet amount. Please enter a valid amount.");
+								intMoney = intMoney + intBet;
 							}
 						}
 						
@@ -108,7 +111,7 @@ public class CPTHadriel {
 							// Check for blackjacks
 							if (hadrieltoolsCPT.handValue(intPlayer, intPlayerCardCount) == 21) {
 								con.println("Blackjack! Player wins!");
-								intMoney += intBet * 3;
+								intMoney = intMoney + intBet * 3;
 								con.println("Your money: " + intMoney);
 							} else if (hadrieltoolsCPT.handValue(intDealer, intDealerCardCount) == 21) {
 								con.println("Dealer has Blackjack! Player loses!");
@@ -130,14 +133,14 @@ public class CPTHadriel {
 									hadrieltoolsCPT.printHand(con, intDealer, intDealerCardCount);
 									if (hadrieltoolsCPT.handValue(intDealer, intDealerCardCount) > 21) {
 										con.println("Dealer busts! Player wins!");
-										intMoney += intBet * 2;
+										intMoney = intMoney + (intBet * 2);
 										con.println("Your money: " + intMoney);
 									} else {
 										intPlayerValue = hadrieltoolsCPT.handValue(intPlayer, intPlayerCardCount);
 										intDealerValue = hadrieltoolsCPT.handValue(intDealer, intDealerCardCount);
 										if (intPlayerValue > intDealerValue) {
 											con.println("Player wins!");
-											intMoney += intBet * 2;
+											intMoney = intMoney + (intBet * 2);
 											con.println("Your money: " + intMoney);
 										} else if (intPlayerValue < intDealerValue) {
 											con.println("Dealer wins! Player loses!");
@@ -173,10 +176,16 @@ public class CPTHadriel {
 						strOption = con.readLine();
 						con.clear();
 						if (!strOption.equalsIgnoreCase("y")) {
+							// Save player info to winners.txt
+							winners.println(strName);
+							winners.println(intMoney);
 							break;
 						}
 					} else {
 						con.println("You are out of money! Game over.");
+						// Save player info to winners.txt
+						winners.println(strName);
+						winners.println(intMoney);
 					}
 					
 					// Reset if player wants to play
@@ -186,12 +195,15 @@ public class CPTHadriel {
 				}
 				
 				// Save player info to winners.txt
-				winners.println(strName);
-				winners.println(intMoney);
-				winners.close();
+				// winners.println(strName);
+				// winners.println(intMoney);
 			}else if(chrChoice == 'q'){
 				con.clear();
 				con.println("Thanks for playing! Final money: "+ intMoney); 
+				// Save player info to winners.txt
+				winners.println(strName);
+				winners.println(intMoney);
+				winners.close();
 				blnContinue = false;
 			}else if(chrChoice == 'v'){
 				con.clear();
@@ -202,6 +214,7 @@ public class CPTHadriel {
 					intMoney = winners2.readInt();
 					con.println(strName);
 					con.println(intMoney);
+					con.sleep(500);
 				}
 				winners2.close();
 				con.println("Press any key to return to the main menu... ");
@@ -214,7 +227,7 @@ public class CPTHadriel {
 				con.drawImage(imgFunnyJoke, 640, 360);
 				break;
 			}else{
-				con.println("No high scores available");
+				con.clear();
 			}		
 		}
 	}
