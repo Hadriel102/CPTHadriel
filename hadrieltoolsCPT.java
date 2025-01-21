@@ -98,6 +98,112 @@ public class hadrieltoolsCPT {
 	return intTotal;
 	}
 	
+	public static void drawMenu(Console con){
+		con.println("");
+		con.println("");
+		con.println("");
+		con.println("");
+		con.println("");
+		con.println("");
+		con.println("");
+		con.println("");
+		con.println("");
+		con.println("");
+		con.println("");
+		con.println("");
+		con.println("");
+		con.println("");
+        con.println("                                   Enter P to play");
+        con.println("                                   (v)iew high scores");
+        con.println("                                   (q)uit");
+	}
+	
+	public static void handlePlayerOptions(Console con, int[][] intDeck, int[][] intPlayer, int[][] intDealer, int intPlayerCardCount, int intDealerCardCount, int intBet, int intMoney) {
+		String strOption;
+		int intPlayerValue = hadrieltoolsCPT.handValue(intPlayer, intPlayerCardCount);
+		int intDealerValue = 0;
+		boolean blnGameWon = false;
+
+		con.println("Hit or stand: ");
+		strOption = con.readLine();
+		con.clear();
+
+		while (strOption.equalsIgnoreCase("hit")) {
+			hadrieltoolsCPT.dealCard(intDeck, intPlayer, intPlayerCardCount);
+			intPlayerCardCount++;
+			con.println("Player's new card: ");
+			hadrieltoolsCPT.printHand(con, intPlayer, intPlayerCardCount);
+
+			if (hadrieltoolsCPT.handValue(intPlayer, intPlayerCardCount) > 21) {
+				con.println("Player busts! You lose!");
+				con.println("Your money: " + intMoney);
+				return;
+			}
+			
+			// Check for 5 card win after player's hit
+			blnGameWon = hadrieltoolsCPT.checkFiveCardWin(con, intPlayer, intPlayerCardCount, intPlayerValue, intDealer, intDealerCardCount, intDealerValue, intBet, intMoney);
+			if(blnGameWon){
+				return;
+			}
+			
+			con.println("Hit or stand: ");
+			strOption = con.readLine();
+			con.clear();
+		}
+		
+		// Dealer's turn if player stands
+		if (strOption.equalsIgnoreCase("stand")) {
+			while (hadrieltoolsCPT.handValue(intDealer, intDealerCardCount) < 17) {
+				hadrieltoolsCPT.dealCard(intDeck, intDealer, intDealerCardCount);
+				intDealerCardCount++;
+			}
+			con.println("Dealer's hand: ");
+			hadrieltoolsCPT.printHand(con, intDealer, intDealerCardCount);
+			
+			if (hadrieltoolsCPT.handValue(intDealer, intDealerCardCount) > 21) {
+				con.println("Dealer busts! Player wins!");
+				intMoney += intBet * 2;
+			} else {
+				intPlayerValue = hadrieltoolsCPT.handValue(intPlayer, intPlayerCardCount);
+				intDealerValue = hadrieltoolsCPT.handValue(intDealer, intDealerCardCount);
+				if (intPlayerValue > intDealerValue) {
+					con.println("Player wins!");
+					intMoney += intBet * 2;
+				} else if (intPlayerValue < intDealerValue) {
+					con.println("Dealer wins! Player loses!");
+				} else {
+					con.println("It's a tie!");
+					intMoney += intBet;
+				}
+			}
+			con.println("Your money: " + intMoney);
+			
+			// Check for 5 card win after dealer's turn
+			blnGameWon = hadrieltoolsCPT.checkFiveCardWin(con, intPlayer, intPlayerCardCount, intPlayerValue, intDealer, intDealerCardCount, intDealerValue, intBet, intMoney);
+			if(blnGameWon){
+				return;
+			}
+		}
+	}
+	
+	public static boolean checkFiveCardWin(Console con, int[][] intPlayer, int intPlayerCardCount, int intPlayerValue, int[][] intDealer, int intDealerCardCount, int intDealerValue, int intBet, int intMoney){
+		if(intPlayerCardCount == 5 && intPlayerValue <= 21){
+			con.println("Player wins with 5 cards without busting!");
+			intMoney += intBet * 2;
+			con.println("Your money: "+intMoney);
+			return true;
+		}else if(intDealerCardCount == 5 && intDealerValue <= 21){
+			con.println("Dealer wins with 5 cards without busting! Player loses!");
+			con.println("Your money: "+ intMoney);
+			return true;
+		}
+		return false;
+	}
+
+	
+	
+	
+	
     
     
     
